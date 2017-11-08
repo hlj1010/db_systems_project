@@ -1,5 +1,3 @@
-<html>
-<pre>
 On this project you can work in pairs. Due December 1st.
 
 
@@ -29,5 +27,3 @@ tables are involved in at least 2 queries.
 
 Submit the databases populated with data, a file for each ddl (d.ddl, d1.ddl, d2.ddl), and a 
 report with a separate section for which of the above points.
-</pre>
-</html>

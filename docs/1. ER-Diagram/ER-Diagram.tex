@@ -1,5 +1,5 @@
 \documentclass{article}
-\usepackage[landscape, margin=1cm]{geometry}
+\usepackage[landscape, margin=0.1cm]{geometry}
 \usepackage{graphicx}
 \usepackage{pdflscape}    %% helps to see in upright direction in pdf
 \usepackage{tikz-er2}
@@ -22,7 +22,7 @@
                          draw=green!50!black!100, drop shadow]
 
 
-\resizebox{\textwidth}{!}{
+\resizebox{\textwidth}{0.9\textheight}{
 \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
 
 % Doctor entity
@@ -38,7 +38,7 @@
   	\node[multi attribute] (dspec) [draw =black,below=0.8 cm of doc] {specializations} edge (doc);
   	
   	% start date attribute
-  	\node[attribute] (dstart) [above left=2.5 cm of doc, xshift = 18mm] {start\_date} edge (doc);
+  	\node[attribute] (dstart) [above left=2.5 cm of doc, xshift = 15mm] {start\_date} edge (doc);
   	
   	% salary attribute
   	\node[attribute] (dsal) [left= 1 cm of doc, yshift=-9mm] {salary} edge (doc);
@@ -50,11 +50,11 @@
   	
 	% address attribute composite
 	\node[attribute] (dadress) [below left=1.9cm  of doc] {address} edge (doc);
-	\node[attribute] (dstr) [below=0.7cm of dadress,xshift=0.6cm] {street} edge (dadress);
+	\node[attribute] (dstr) [below=0.5cm of dadress] {street} edge (dadress);
 	\node[attribute] (dcity) [below left= of dadress,yshift=0.2cm] {city} edge (dadress);
 	\node[attribute] (dstate) [left=0.3cm of dadress,yshift=-0.2cm] {state} edge (dadress);
 	\node[attribute] (dcountry) [above left=0.9 of dadress, yshift=-5mm] {country} edge (dadress);
-	\node[attribute] (dzip) [below right =0.3 of dadress] {zipcode} edge (dadress);
+	\node[attribute] (dzip) [below right =0.3 of dadress] {zip} edge (dadress);
 	
 	% phone attribute
 	\node[attribute] (docphone) [left=0.7cm  of doc,yshift=4] {phone} edge (doc);
@@ -70,7 +70,7 @@
 	\node[multi attribute] (tcons) [draw = black,below left =0.3cm of treat,xshift=-0.2cm] {consultation\_dates} edge (treat);
 
 % patient entity
-\node[entity] (pat) [below=4cm of treat] {Patient} edge [total] (treat);
+\node[entity] (pat) [below=2.5cm of treat] {Patient} edge [total] (treat);
 
 	%i d attribute - primary key
   	\node[attribute] (patid) [above left=1.2 cm of pat, xshift=1.3cm] {\key{patientID}} edge (pat);
@@ -80,7 +80,20 @@
   	\node[attribute] (pfname) [above  =0.05 cm of patname,xshift=0.6cm] {first} edge (patname);
     \node[attribute] (plname) [above =0.05 cm of patname,xshift=-1.3cm] {last} edge (patname);
     
-    % 
+    % address attribute composite
+	\node[attribute] (pad) [below left=1cm  of pat,yshift=0.5cm] {address} edge (pat);
+	\node[attribute] (pstr) [below=0.5cm of pad] {street} edge (pad);
+	\node[attribute] (pcity) [below left= of pad,yshift=0.2cm] {city} edge (pad);
+	\node[attribute] (pstate) [left=0.3cm of pad,yshift=-0.2cm] {state} edge (pad);
+	\node[attribute] (pcountry) [above left=0.9 of pad, yshift=-5mm] {country} edge (pad);
+	\node[attribute] (pzip) [below right =0.3 of pad] {zip} edge (pad);
+	
+	% phone attribute
+	\node[attribute] (pphone) [below=0.2cm  of pat,yshift=4] {phone} edge (pat);
+	\node[attribute] (ppphone) [below=0.3cm  of pphone,xshift=0.9cm] {work} edge (pphone);
+	\node[attribute] (pwphone) [below right=1.5cm  of pphone,yshift=1cm] {cell} edge (pphone);
+	
+	% gender attribute	
 
 \end{tikzpicture}
 }

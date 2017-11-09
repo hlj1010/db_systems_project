@@ -1,13 +1,10 @@
-\documentclass[letter,12pt, potrait]{article}
-\usepackage[landscape]{geometry}
+\documentclass{article}
+\usepackage[landscape, margin=1cm]{geometry}
 \usepackage{graphicx}
+\usepackage{pdflscape}    %% helps to see in upright direction in pdf
 \usepackage{tikz-er2}
 \title{ER-Diagram}
 \begin{document}
-\maketitle
-Design a database for storing information about medical doctors, their patients, and ilnesses: \\
-Draw its E-R diagram.
-\\ \break \hfill
 \usetikzlibrary{positioning}
 \usetikzlibrary{shadows}
 
@@ -16,7 +13,7 @@ Draw its E-R diagram.
 \tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex, 
                                 shadow yshift=-.7ex}]
 \tikzstyle{every attribute} = [top color=white, bottom color=yellow!20, 
-                               draw=yellow, node distance=2cm, drop shadow]
+                               draw=yellow, node distance=1cm, drop shadow]
 \tikzstyle{every multi attribute} = [top color=white, bottom color=yellow!20, 
                                draw=black, node distance=2cm, drop shadow]
 \tikzstyle{every relationship} = [top color=white, bottom color=red!20, 
@@ -25,49 +22,65 @@ Draw its E-R diagram.
                          draw=green!50!black!100, drop shadow]
 
 
-\scalebox{.87}{
+\resizebox{\textwidth}{!}{
 \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
 
 % Doctor entity
 \node[entity] (doc) {Doctor};
   
 	%id attribute - primary key
-  	\node[attribute] (did) [above= 1 cm of doc] {\key{doc\_id}} edge (doc);
+  	\node[attribute] (did) [above=0.5 cm of doc] {\key{doctorID}} edge (doc);
   	
   	% department attribute
-  	\node[attribute] (ddept) [above right= 1 cm of doc, yshift=2mm] {doc\_department} edge (doc);
+  	\node[attribute] (ddept) [above right=0.5 cm of doc, xshift=2mm] {department} edge (doc);
   	
   	% specializations attribute
-  	\node[multi attribute] (dspec) [draw =black,below= 1 cm of doc] {doc\_specializations} edge (doc);
+  	\node[multi attribute] (dspec) [draw =black,below=0.8 cm of doc] {specializations} edge (doc);
   	
   	% start date attribute
-  	\node[attribute] (dstart) [above left=2.5 cm of doc, xshift = 18mm] {doc\_start\_date} edge (doc);
+  	\node[attribute] (dstart) [above left=2.5 cm of doc, xshift = 18mm] {start\_date} edge (doc);
   	
   	% salary attribute
-  	\node[attribute] (dsal) [left= 1 cm of doc, yshift=-9mm] {doc\_salary} edge (doc);
+  	\node[attribute] (dsal) [left= 1 cm of doc, yshift=-9mm] {salary} edge (doc);
   	  	
   	% name attribute composite 
-  	\node[attribute] (dname) [above left=1 cm of doc, yshift=-2mm] {doc\_name} edge (doc);
-  	\node[attribute] (dfname) [below left=1 cmof dname] {doc\_name\_first} edge (dname);
-    \node[attribute] (dlname) [left=1 cm of dname] {doc\_name\_last} edge (dname);
+  	\node[attribute] (dname) [above left=1 cm of doc, yshift=-2mm] {name} edge (doc);
+  	\node[attribute] (dfname) [above left=0.3 of dname] {first} edge (dname);
+    \node[attribute] (dlname) [left=0.3 cm of dname,yshift=-0.4] {last} edge (dname);
   	
 	% address attribute composite
-	\node[attribute] (dadress) [below left=2.5cm  of doc] {doc\_address} edge (doc);
-	\node[attribute] (dstr) [below= of dadress] {doc\_address\_street} edge (dadress);
-	\node[attribute] (dcity) [below left= of dadress] {doc\_address\_city} edge (dadress);
-	\node[attribute] (dstate) [left= of dadress] {doc\_address\_state} edge (dadress);
-	\node[attribute] (dcountry) [above left= of dadress, yshift=-5mm] {doc\_address\_country} edge (dadress);
-	\node[attribute] (dzip) [below right = of dadress] {doc\_address\_zipcode} edge (dadress);
+	\node[attribute] (dadress) [below left=1.9cm  of doc] {address} edge (doc);
+	\node[attribute] (dstr) [below=0.7cm of dadress,xshift=0.6cm] {street} edge (dadress);
+	\node[attribute] (dcity) [below left= of dadress,yshift=0.2cm] {city} edge (dadress);
+	\node[attribute] (dstate) [left=0.3cm of dadress,yshift=-0.2cm] {state} edge (dadress);
+	\node[attribute] (dcountry) [above left=0.9 of dadress, yshift=-5mm] {country} edge (dadress);
+	\node[attribute] (dzip) [below right =0.3 of dadress] {zipcode} edge (dadress);
+	
+	% phone attribute
+	\node[attribute] (docphone) [left=0.7cm  of doc,yshift=4] {phone} edge (doc);
+	\node[attribute] (docpphone) [left=0.7cm  of docphone,yshift=12] {work} edge (docphone);
+	\node[attribute] (docwphone) [below left=1.5cm  of docphone,yshift=1cm] {cell} edge (docphone);	
 	
 % treats relationship
 \node[relationship] (treat) [right=4cm of doc] {Treats} edge [total] (doc);
+	
+	% start data attribute
+	%	\node[attribute] (tfrom) [below=0.5cm of treat,xshift=-1.7cm] {treat\_start} edge (treat);
+	%consultation dates 
+	\node[multi attribute] (tcons) [draw = black,below left =0.3cm of treat,xshift=-0.2cm] {consultation\_dates} edge (treat);
 
-	\node[attribute] (from)
+% patient entity
+\node[entity] (pat) [below=4cm of treat] {Patient} edge [total] (treat);
 
-	% patient entity
-	\node[entity] (pat) [right=3cm of treat] {Patient} edge [total] (treat);
-
-
+	%i d attribute - primary key
+  	\node[attribute] (patid) [above left=1.2 cm of pat, xshift=1.3cm] {\key{patientID}} edge (pat);
+  	
+  	% name attribute composite
+  	\node[attribute] (patname) [left=0.5 cm of pat] {name} edge (pat);
+  	\node[attribute] (pfname) [above  =0.05 cm of patname,xshift=0.6cm] {first} edge (patname);
+    \node[attribute] (plname) [above =0.05 cm of patname,xshift=-1.3cm] {last} edge (patname);
+    
+    % 
 
 \end{tikzpicture}
 }

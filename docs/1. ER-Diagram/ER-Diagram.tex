@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[a1]{article}
 \usepackage[landscape, margin=0.1cm]{geometry}
 \usepackage{graphicx}
 \usepackage{pdflscape}    %% helps to see in upright direction in pdf
@@ -22,7 +22,7 @@
                          draw=green!50!black!100, drop shadow]
 
 
-\resizebox{\textwidth}{0.9\textheight}{
+\resizebox{0.95\textwidth}{0.95\textheight}{
 \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
 
 % Doctor entity
@@ -61,11 +61,14 @@
 	\node[attribute] (docpphone) [left=0.7cm  of docphone,yshift=12] {work} edge (docphone);
 	\node[attribute] (docwphone) [below left=1.5cm  of docphone,yshift=1cm] {cell} edge (docphone);	
 	
+	\node[derived attribute] (docwe) [above right=0.5cm  of doc,yshift=1cm,draw = black,xshift=-0.8cm] {years\_experience} edge (doc);	
+	
 % treats relationship
-\node[relationship] (treat) [right=4cm of doc] {Treats} edge [total] (doc);
+\node[relationship] (treat) [right=4cm of doc] {Treats} edge (doc);
 	
 	% start data attribute
-	%	\node[attribute] (tfrom) [below=0.5cm of treat,xshift=-1.7cm] {treat\_start} edge (treat);
+	\node[multi attribute] (tnotes) [above =0.5cm of treat,draw = black] {notes} edge (treat);
+	\node[derived attribute] (tstart) [below right =0.2cm of treat,draw = black] {start\_date} edge (treat);
 	%consultation dates 
 	\node[multi attribute] (tcons) [draw = black,below left =0.3cm of treat,xshift=-0.2cm] {consultation\_dates} edge (treat);
 
@@ -77,23 +80,42 @@
   	
   	% name attribute composite
   	\node[attribute] (patname) [left=0.5 cm of pat] {name} edge (pat);
-  	\node[attribute] (pfname) [above  =0.05 cm of patname,xshift=0.6cm] {first} edge (patname);
-    \node[attribute] (plname) [above =0.05 cm of patname,xshift=-1.3cm] {last} edge (patname);
+	  	\node[attribute] (pfname) [above  =0.05 cm of patname,xshift=0.6cm] {first} edge (patname);
+	    \node[attribute] (plname) [above =0.05 cm of patname,xshift=-1.3cm] {last} edge (patname);
     
     % address attribute composite
 	\node[attribute] (pad) [below left=1cm  of pat,yshift=0.5cm] {address} edge (pat);
-	\node[attribute] (pstr) [below=0.5cm of pad] {street} edge (pad);
-	\node[attribute] (pcity) [below left= of pad,yshift=0.2cm] {city} edge (pad);
-	\node[attribute] (pstate) [left=0.3cm of pad,yshift=-0.2cm] {state} edge (pad);
-	\node[attribute] (pcountry) [above left=0.9 of pad, yshift=-5mm] {country} edge (pad);
-	\node[attribute] (pzip) [below right =0.3 of pad] {zip} edge (pad);
+		\node[attribute] (pstr) [below=0.5cm of pad] {street} edge (pad);
+		\node[attribute] (pcity) [below left= of pad,yshift=0.2cm] {city} edge (pad);
+		\node[attribute] (pstate) [left=0.3cm of pad,yshift=-0.2cm] {state} edge (pad);
+		\node[attribute] (pcountry) [above left=0.9 of pad, yshift=-5mm] {country} edge (pad);
+		\node[attribute] (pzip) [below right =0.3 of pad] {zip} edge (pad);
 	
 	% phone attribute
 	\node[attribute] (pphone) [below=0.2cm  of pat,yshift=4] {phone} edge (pat);
-	\node[attribute] (ppphone) [below=0.3cm  of pphone,xshift=0.9cm] {work} edge (pphone);
-	\node[attribute] (pwphone) [below right=1.5cm  of pphone,yshift=1cm] {cell} edge (pphone);
+		\node[attribute] (ppphone) [below=0.3cm  of pphone,xshift=0.9cm] {work} edge (pphone);
+		\node[attribute] (pwphone) [below right=1.5cm  of pphone,yshift=1cm] {cell} edge (pphone);
 	
-	% gender attribute	
+	% insurance attribute
+	\node[attribute] (pins) [below right=0.6 of pat,yshift = 0.6 cm] {insurance} edge (pat);
+		\node[attribute] (piname) [above=0.3cm of pins,xshift=-0.3cm] {plan} edge (pins);
+		\node[attribute] (pinnum) [above right=0.3cm of pins] {policy\_number} edge (pins);
+		\node[attribute] (pinauth) [right=0.3cm of pins,yshift=-0.1cm] {authorization\_number} edge (pins);
+	
+\node[relationship] (has) [above right=2cm of pat] {has} edge  [->] (pat);
+
+% patient entity
+\node[weak entity] (med) [right=3.4cm of treat] {Medical Record} edge [total] (has);	
+
+	\node[attribute] (missue) [left=1 cm of med,yshift=1cm] {\discriminator{issue\_date}} edge (med);
+	\node[attribute] (msex) [above left=0.5 cm of med, yshift = 0.6 cm] {gender} edge (med);
+	\node[attribute] (mbirth) [above =0.5 cm of med] {date of birth} edge (med);
+	\node[derived attribute] (mage) [above =0.5 cm of med,xshift = 2.6 cm,draw=black] {age} edge (med);
+	\node[attribute] (mblood) [right =0.3 cm of med, yshift = 0.5cm] {blood\_group} edge (med);
+	\node[multi attribute] (mblood) [right =0.3 cm of med, yshift = -0.5cm,draw=black] {allergies} edge (med);
+	\node[multi attribute] (mcond) [below =0.6 cm of med, xshift = 3.1cm,draw=black] {existing\_conditions} edge (med);
+	\node[multi attribute] (mmed) [below = 1.4cm of med,draw=black] {prescribed\_medication} edge (med);
+
 
 \end{tikzpicture}
 }

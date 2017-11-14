@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  14 NOV 2017 11:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.11.14)  14 NOV 2017 17:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**"Schedule and Special Note.tex"
+**"./Schedule and Special Note.tex"
 (./Schedule and Special Note.tex
 LaTeX2e <2017-04-15>
-Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls
+Babel <3.15> and hyphenation patterns for 84 language(s) loaded.
+(d:/texlive/2017/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2017/texmf-dist/tex/latex/base/size12.clo
+(d:/texlive/2017/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -53,21 +53,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--29
 
 [1
 
-{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] (./Schedule and Special Note.aux) ) 
+{d:/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+(./Schedule and Special Note.aux) ) 
 Here is how much of TeX's memory you used:
- 215 strings out of 492995
- 2507 string characters out of 6132704
- 56074 words of memory out of 5000000
- 3850 multiletter control sequences out of 15000+600000
+ 215 strings out of 492985
+ 2484 string characters out of 6136283
+ 56187 words of memory out of 5000000
+ 3860 multiletter control sequences out of 15000+600000
  5756 words of font info for 21 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 22i,6n,19p,202b,193s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/font
-s/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr17.pfb>
-Output written on "Schedule and Special Note.pdf" (2 pages, 38756 bytes).
+ 22i,6n,19p,204b,193s stack positions out of 5000i,500n,10000p,200000b,80000s
+<d:/texlive/2017/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx12.pfb><d:/texlive/2017/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb><d:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+7.pfb>
+Output written on "Schedule and Special Note.pdf" (2 pages, 38761 bytes).
 PDF statistics:
  23 PDF objects out of 1000 (max. 8388607)
  15 compressed objects within 1 object stream

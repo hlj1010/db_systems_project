@@ -1,8 +1,6 @@
-\documentclass[a1]{article}
-\usepackage[landscape, margin=0.1cm]{geometry}
-\usepackage{graphicx}
-\usepackage{pdflscape}    %% helps to see in upright direction in pdf
+\documentclass[tikz,border = 0.5cm]{standalone}
 \usepackage{tikz-er2}
+
 \title{ER-Diagram}
 \begin{document}
 \usetikzlibrary{positioning}
@@ -116,7 +114,7 @@
 	\node[multi attribute] (mmed) [above = 1.5cm of med,draw=black,xshift=0.9cm,yshift=-0.2cm] {prescribed\_medication} edge (med);
 
 % suffer relationship
-\node[relationship] (suf) [below =5cm of pat] {suffers} edge (pat);
+\node[relationship] (suf) [below =5.2cm of pat] {suffers} edge (pat);
 	\node[attribute] (suff)[above left= 1cm of suf] {from\_date} edge (suf);
 
 % illness entity
@@ -127,6 +125,5 @@
 	\node[multi attribute] (trts) [above right=1cm of tr,draw=black,xshift=-0.6cm] {available\_slots} edge (tr);
 
 \end{tikzpicture}
-\pagebreak
 
 \end{document}

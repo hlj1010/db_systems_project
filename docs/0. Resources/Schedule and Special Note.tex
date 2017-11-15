@@ -1,30 +1,54 @@
 \documentclass[12pt]{article}
+\usepackage{color}
 \begin{document}
-
+\def\labelitemi{--}
 \title{Schedule and Special Note}
 \maketitle
 
 \section{Schedule}
 
-1. Draw its E-R diagram.\\
-	--Almost Done.\\
-2. Give a relational representation of the E-R diagram that allows for 2 functional preserving and lossless join decompositions. Describe its functional dependencies.\\
-	-- Nov, 16th\\
-3. Give the two decompositions and prove that they are lossless join and functional preserving.\\
-	--Nov, 16th\\
-4. Give the SQL DDLs for creating the three versions of the database.\\
-	--Nov, 21st\\
-5. Fill the first database with data (at least 100 columns in each table).\\
-	--Nov, 21st\\
-6. Give the SQL queries to copy the data from the first version into its 2 decompositions.\\
-	--Nov, 25th\\
-7. Propose in english 3 queries that require at least 2 table joins each and such that all tables are involved in at least 2 queries.\\
-	--Nov, 25th\\
-8. Propose SQL implementations of the 3 queries on all three versions of the database.\\
-	--Nov, 30th\\
-9. Test the time in ns for exeuting the 3 queries on each database, by running each of them 1000 times.\\
-	--Nov, 30th\\
-\\
+
+\begin{enumerate}
+	\item Draw its E-R diagram.
+	\begin{itemize}
+		\item Almost Done
+		\item {\color{blue} This will be updated as other steps progress}
+	\end{itemize}
+	\item Give a relational representation of the E-R diagram that allows for 2 functional preserving and lossless join decompositions. Describe its functional dependencies.
+ \begin{itemize}
+		\item Nov, 16th
+		\item {\color{blue} We need to modify the decomposition. Im not sure how to satisfy the "allows for 2 functional preserving and lossless join decompositions" condition}
+	\end{itemize}
+	\item Give the two decompositions and prove that they are lossless join and functional preserving.
+	\begin{itemize}
+		\item Nov, 16th
+	\end{itemize}
+	\item Give the SQL DDLs for creating the three versions of the database.
+	\begin{itemize}
+		\item Nov, 21st
+	\end{itemize}
+	\item Fill the first database with data (at least 100 columns in each table).
+	\begin{itemize}
+		\item Nov, 21st
+	\end{itemize}
+	\item Give the SQL queries to copy the data from the first version into its 2 decompositions.
+	\begin{itemize}
+		\item Nov, 25th
+	\end{itemize}
+	\item Propose in english 3 queries that require at least 2 table joins each and such that all tables are involved in at least 2 queries.
+	\begin{itemize}
+		\item Nov, 25th
+	\end{itemize}
+	\item Propose SQL implementations of the 3 queries on all three versions of the database.
+	\begin{itemize}
+		\item Nov, 30th
+	\end{itemize}
+	\item Test the time in ns for exeuting the 3 queries on each database, by running each of them 1000 times.
+	\begin{itemize}
+		\item Nov, 30th
+	\end{itemize}
+\end{enumerate}
+
 Due Dec, 1st, 2017. One day to check whole things and submit.
 
 \section{Special Note}

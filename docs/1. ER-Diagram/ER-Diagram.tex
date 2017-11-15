@@ -117,12 +117,6 @@
 \node[relationship] (suf) [below =5.2cm of pat] {suffers} edge (pat);
 	\node[attribute] (suff)[above left= 1cm of suf] {from\_date} edge (suf);
 
-%<<<<<<< HEAD
-%\node[entity] (ill) [below left = 1cm of suf,xshift=-0.5cm] {illness} edge (suf);
-%	\node[attribute] (ille) [left= 1 cm of ill, draw = black] {emergency\_level} edge (ill);
-%	\node[multi attribute] (ills) [above= 1 cm of ill, draw = black] {symptoms} edge (ill);
-%\node[relationship] (tr) [below= 2 cm of doc] {can\_treat} edge [total] (doc) edge (ill);
-%=======
 % illness entity
 \node[entity] (ill) [left = 3cm of suf] {illness} edge (suf);
 	% name
@@ -135,7 +129,7 @@
 
 % can treat relationship
 \node[relationship] (tr) [below= 5 cm of doc] {can\_treat} edge [total] (doc) edge (ill);
-%>>>>>>> 441fec2ba41ce055e8459fc7965762c43412921b
+
 	\node[multi attribute] (trts) [above right=1cm of tr,draw=black,xshift=-0.6cm] {available\_slots} edge (tr);
 
 \end{tikzpicture}

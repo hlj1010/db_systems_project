@@ -87,7 +87,7 @@
 		\node[attribute] (pcountry) [above left=0.9 of pad, yshift=-5mm] {country} edge (pad);
 		\node[attribute] (pzip) [above =0.3 of pad] {zip} edge (pad);
 	
-	% phone attribute
+	% phone attribute composite
 	\node[attribute] (pphone) [below=0.3cm  of pat,xshift=01cm] {phone} edge (pat);
 		\node[attribute] (ppphone) [below=1cm  of pphone,xshift=2cm] {work} edge (pphone);
 		\node[attribute] (pwphone) [below =1.5cm of pphone,yshift=1cm] {cell} edge (pphone);
@@ -119,6 +119,12 @@
 
 % illness entity
 \node[entity] (ill) [left = 3cm of suf] {illness} edge (suf);
+
+	% symptom attribute - primary key
+	\node[attribute] (symt) [below=1cm  of ill,xshift=-2cm] {\key{symptom}} edge (ill);
+
+	% symptom attribute - primary key
+	\node[attribute] (eml) [below=1cm  of ill,xshift=2cm] {emergency\_level} edge (ill);
 
 % can treat relationship
 \node[relationship] (tr) [below= 5 cm of doc] {can\_treat} edge [total] (doc) edge (ill);

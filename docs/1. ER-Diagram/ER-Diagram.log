@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.11.14)  14 NOV 2017 19:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2017.11.14)  14 NOV 2017 20:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -482,16 +482,16 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 {d:/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 (./ER-Diagram.aux) ) 
 Here is how much of TeX's memory you used:
- 13401 strings out of 492985
- 278285 string characters out of 6136283
- 419962 words of memory out of 5000000
- 16723 multiletter control sequences out of 15000+600000
+ 13413 strings out of 492985
+ 278447 string characters out of 6136283
+ 424894 words of memory out of 5000000
+ 16735 multiletter control sequences out of 15000+600000
  3746 words of font info for 15 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,7n,78p,418b,785s stack positions out of 5000i,500n,10000p,200000b,80000s
 <d:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmr10.pfb>
-Output written on ER-Diagram.pdf (1 page, 31209 bytes).
+Output written on ER-Diagram.pdf (1 page, 31680 bytes).
 PDF statistics:
  45 PDF objects out of 1000 (max. 8388607)
  21 compressed objects within 1 object stream

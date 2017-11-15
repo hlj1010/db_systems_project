@@ -120,6 +120,8 @@
 	\node[attribute] (suff)[above left= 1cm of suf] {from\_date} edge (suf);
 
 \node[entity] (ill) [below left = 1cm of suf,xshift=-0.5cm] {illness} edge (suf);
+	\node[attribute] (ille) [left= 1 cm of ill, draw = black] {emergency\_level} edge (ill);
+	\node[multi attribute] (ills) [above= 1 cm of ill, draw = black] {symptoms} edge (ill);
 \node[relationship] (tr) [below= 2 cm of doc] {can\_treat} edge [total] (doc) edge (ill);
 	\node[multi attribute] (trts) [above right=1cm of tr,draw=black,xshift=-0.6cm] {available\_slots} edge (tr);
 

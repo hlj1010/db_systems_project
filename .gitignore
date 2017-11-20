@@ -12,6 +12,11 @@
 *.cb
 *.cb2
 
+## backup files
+
+~*
+*~
+
 ## Intermediate documents:
 *.dvi
 *.xdv

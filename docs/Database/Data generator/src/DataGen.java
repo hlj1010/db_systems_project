@@ -1,3 +1,4 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -74,6 +75,21 @@ public class DataGen {
         }
     }
 
+    public static void insertIllness (int id, String name, String dept, String sympt, int emer) {
+        String sql = "INSERT INTO Doctor(Illness_ID,Illness_Name,Department,Symptoms,Emergency_Level) VALUES(?,?,?,?,?)";
+
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, name);
+            pstmt.setString(3, dept);
+            pstmt.setString(4, sympt);
+            pstmt.setInt(5, emer);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * @param args
      *            the command line arguments
@@ -82,14 +98,53 @@ public class DataGen {
     public static void main (String[] args) throws IOException {
         ArrayList<Long> PhoneNos = GeneratePhoneNos(10000);
         ArrayList<String> names = GenerateNames(10000);
+        ArrayList<String> diseases = GenerateDiseases(1000);
+        ArrayList<String> symptoms = GenerateSymptoms(1000);
+        ArrayList<String> docnames = new ArrayList<String>();
         ArrayList<String[]> data = new ArrayList<String[]>(
                 new CSVReader(new FileReader(new File("etc/random.csv"))).readAll());
         Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < 100; i++) {
-            insertDoctor(i + 1, names.remove(r.nextInt(names.size())), PhoneNos.remove(r.nextInt(PhoneNos.size())),
-                    data.get(i)[0], data.get(i)[1], Integer.parseInt(data.get(i)[2]), depts[r.nextInt(depts.length)]);
+            String name = names.remove(r.nextInt(names.size()));
+            docnames.add(name);
+            insertDoctor(i + 1, name, PhoneNos.remove(r.nextInt(PhoneNos.size())), data.get(i)[0], data.get(i)[1],
+                    Integer.parseInt(data.get(i)[2]), depts[r.nextInt(depts.length)]);
+            insertIllness(i + 1, diseases.remove(r.nextInt(diseases.size())), depts[r.nextInt(depts.length)],
+                    symptoms.remove(r.nextInt(symptoms.size())), r.nextInt(11));
         }
         // dump(names);
+    }
+
+    private static ArrayList<String> GenerateDiseases (int i) throws IOException {
+        ArrayList<String> Diseases = new ArrayList<>();
+        Random r = new Random(System.currentTimeMillis());
+        FileReader f = new FileReader(new File("etc/disease.txt"));
+        BufferedReader br = new BufferedReader(f);
+        String s;
+        for (int j = 0; j < i; j++) {
+            for (int k = 0; k < r.nextInt(20); k++)
+                br.readLine();
+            s = br.readLine();
+            Diseases.add(s.split(" ")[1]);
+        }
+        br.close();
+        return Diseases;
+    }
+
+    private static ArrayList<String> GenerateSymptoms (int i) throws IOException {
+        ArrayList<String> Diseases = new ArrayList<>();
+        Random r = new Random(System.currentTimeMillis());
+        FileReader f = new FileReader(new File("etc/sym.txt"));
+        BufferedReader br = new BufferedReader(f);
+        String s;
+        for (int j = 0; j < i; j++) {
+            for (int k = 0; k < r.nextInt(20); k++)
+                br.readLine();
+            s = br.readLine();
+            Diseases.add(s.split(" ")[1]);
+        }
+        br.close();
+        return Diseases;
     }
 
     private static void dump (ArrayList<String> a) {

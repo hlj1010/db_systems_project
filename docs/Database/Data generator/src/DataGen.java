@@ -15,6 +15,8 @@ import au.com.bytecode.opencsv.CSVReader;
  * @author sqlitetutorial.net
  */
 public class DataGen {
+    private final static String[] depts = { "A&E", "Cardiology", "Imaging", "ENT", "Surgery", "Gynaecology",
+            "Neurology", "Physiotherapy" };
 
     private static Connection connect () {
         // SQLite connection string
@@ -85,7 +87,7 @@ public class DataGen {
         Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < 100; i++) {
             insertDoctor(i + 1, names.remove(r.nextInt(names.size())), PhoneNos.remove(r.nextInt(PhoneNos.size())),
-                    data.get(i)[0], data.get(i)[1], Integer.parseInt(data.get(i)[2]), "some dept");
+                    data.get(i)[0], data.get(i)[1], Integer.parseInt(data.get(i)[2]), depts[r.nextInt(depts.length)]);
         }
         // dump(names);
     }
@@ -117,7 +119,7 @@ public class DataGen {
         ArrayList<Long> temp = new ArrayList<>();
         Random r = new Random(System.currentTimeMillis());
         for (int j = 0; j < i; j++)
-            temp.add(r.nextLong() % (new Long("9999999999") - 2000000000 + 1));
+            temp.add(Math.abs(r.nextLong() % (new Long("9999999999") - 2000000000 + 1)));
         return temp;
     }
 

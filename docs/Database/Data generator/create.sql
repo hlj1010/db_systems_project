@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS "Doctor" (
 	PRIMARY KEY(`Doctor_ID`)
 );
 CREATE TABLE `Illness` (
-	`Illness_ID`	NUMERIC NOT NULL,
+	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
 	`Illness_Name`	TEXT NOT NULL UNIQUE,
-	`Departmet`	TEXT UNIQUE,
+	`Department`	TEXT,
 	`Symptoms`	TEXT,
 	`Emergency_Level`	INTEGER,
 	PRIMARY KEY(`Illness_ID`)

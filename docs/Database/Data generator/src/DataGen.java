@@ -76,7 +76,7 @@ public class DataGen {
     }
 
     public static void insertIllness (int id, String name, String dept, String sympt, int emer) {
-        String sql = "INSERT INTO Doctor(Illness_ID,Illness_Name,Department,Symptoms,Emergency_Level) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO Illness(Illness_ID,Illness_Name,Department,Symptoms,Emergency_Level) VALUES(?,?,?,?,?)";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -124,8 +124,9 @@ public class DataGen {
         for (int j = 0; j < i; j++) {
             for (int k = 0; k < r.nextInt(20); k++)
                 br.readLine();
-            s = br.readLine();
-            Diseases.add(s.split(" ")[1]);
+            s = br.readLine().split(" ")[1];
+            if (!Diseases.contains(s))
+                Diseases.add(s);
         }
         br.close();
         return Diseases;
@@ -141,7 +142,7 @@ public class DataGen {
             for (int k = 0; k < r.nextInt(20); k++)
                 br.readLine();
             s = br.readLine();
-            Diseases.add(s.split(" ")[1]);
+            Diseases.add(s.split("^[^\\s]*\\s")[1]);
         }
         br.close();
         return Diseases;

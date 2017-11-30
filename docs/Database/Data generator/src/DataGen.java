@@ -21,7 +21,7 @@ public class DataGen {
 
     private static Connection connect () {
         // SQLite connection string
-        String url = "jdbc:sqlite:test.db";
+        String url = "jdbc:sqlite:../d.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);

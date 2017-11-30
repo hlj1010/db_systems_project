@@ -38,7 +38,7 @@ public class DataGen {
      * @param capacity
      */
     public static void insertPatient (int id, String name, long phone, String add, String birthday, String Gender,
-            String alrg, String docid, String illid) {
+            String alrg, int docid, int illid) {
         String sql = "INSERT INTO Patient(Patient_ID,Patient_Name,Phone,Address,Birthday,Gender,Allergies_History,Doctor_ID,Illness_ID) VALUES(?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -49,8 +49,8 @@ public class DataGen {
             pstmt.setString(5, birthday);
             pstmt.setString(6, Gender);
             pstmt.setString(7, alrg);
-            pstmt.setString(8, docid);
-            pstmt.setString(9, illid);
+            pstmt.setInt(8, docid);
+            pstmt.setInt(9, illid);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -101,17 +101,28 @@ public class DataGen {
         ArrayList<String> diseases = GenerateDiseases(1000);
         ArrayList<String> symptoms = GenerateSymptoms(1000);
         ArrayList<String> docnames = new ArrayList<String>();
-        ArrayList<String[]> data = new ArrayList<String[]>(
+        ArrayList<String[]> Allergies = new ArrayList<String[]>(
+                new CSVReader(new FileReader(new File("etc/alrg.csv"))).readAll());
+        ArrayList<String[]> datadoc = new ArrayList<String[]>(
                 new CSVReader(new FileReader(new File("etc/random.csv"))).readAll());
+        ArrayList<String[]> datapat = new ArrayList<String[]>(
+                new CSVReader(new FileReader(new File("etc/random1.csv"))).readAll());
         Random r = new Random(System.currentTimeMillis());
         for (int i = 0; i < 100; i++) {
             String name = names.remove(r.nextInt(names.size()));
             docnames.add(name);
-            insertDoctor(i + 1, name, PhoneNos.remove(r.nextInt(PhoneNos.size())), data.get(i)[0], data.get(i)[1],
-                    Integer.parseInt(data.get(i)[2]), depts[r.nextInt(depts.length)]);
+            insertDoctor(i + 1, name, PhoneNos.remove(r.nextInt(PhoneNos.size())), datadoc.get(i)[0], datadoc.get(i)[1],
+                    Integer.parseInt(datadoc.get(i)[2]), depts[r.nextInt(depts.length)]);
+
             insertIllness(i + 1, diseases.remove(r.nextInt(diseases.size())), depts[r.nextInt(depts.length)],
                     symptoms.remove(r.nextInt(symptoms.size())), r.nextInt(11));
         }
+        for (int i = 0; i < 1000; i++) {
+            String name = names.remove(r.nextInt(names.size()));
+            insertPatient(i + 1, name, PhoneNos.remove(r.nextInt(PhoneNos.size())), datapat.get(i)[0],
+                    datapat.get(i)[1], datapat.get(i)[2], Allergies.get(i)[0], r.nextInt(100) + 1, r.nextInt(100) + 1);
+        }
+
         // dump(names);
     }
 

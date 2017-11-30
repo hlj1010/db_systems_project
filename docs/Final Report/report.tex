@@ -1,0 +1,272 @@
+\documentclass[12pt,arial]{article}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage[pdftex,pdfpagelabels,bookmarks,hyperindex,hyperfigures]{hyperref}
+\usepackage{color}
+\usepackage{tikz-er2}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ \usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+
+\tikzstyle{every entity} = [top color=white, bottom color=blue!30, 
+                          		  draw=blue!50!black!100, drop shadow]
+\tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex, 
+                                shadow yshift=-.7ex}]
+\tikzstyle{every attribute} = [top color=white, bottom color=yellow!20, 
+                               draw=yellow, node distance=1cm, drop shadow]
+\tikzstyle{every multi attribute} = [top color=white, bottom color=yellow!20, 
+                               draw=black, node distance=2cm, drop shadow]
+\tikzstyle{every relationship} = [top color=white, bottom color=red!20, 
+                                  draw=red!50!black!100, drop shadow]
+\tikzstyle{every sub} = [top color=white, bottom color=green!20, 
+                         draw=green!50!black!100, drop shadow]
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+\title{CSE 4020 - Database Systems Project}
+\author{Lingjing Huang, Shreyas Ugemuge}
+\begin{document}
+\maketitle
+\tableofcontents
+\pagebreak
+\section*{Problem Statement}
+\addcontentsline{toc}{section}{Problem Statement}
+Design a database for storing information about medical doctors, their patients, and ilnesses (using sqlite3):
+\begin{enumerate}
+	\item Draw its E-R diagram.
+	\item Give a relational representation of the E-R diagram that allows for 2 functional preserving and lossless join decompositions. Describe its functional dependencies.
+	\item Give the two decompositions and prove that they are lossless join and functional preserving.
+	\item Give the SQL DDLs for creating the three versions of the database.
+	\item Fill the first database with data (at least 100 columns in each table).
+	\item Give the SQL queries to copy the data from the first version into its 2 decompositions.
+	\item Propose in english 3 queries that require at least 2 table joins each and such that all tables are involved in at least 2 queries.
+	\item Propose SQL implementations of the 3 queries on all three versions of the database.
+	\item Test the time in ns for exeuting the 3 queries on each database, by running each of them 1000 times.
+\end{enumerate}
+\pagebreak
+\section{ER-Diagram}
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+% Doctor entity
+\node[entity] (doc) {Doctor};
+	%id attribute - primary key
+  	\node[attribute] (did) [above=0.5 cm of doc] {\key{doctorID}} edge (doc);
+  	% department attribute
+  	\node[attribute] (ddept) [above right=0.5 cm of doc,xshift=0.2cm] {department} edge (doc);
+  	% start date attribute
+  	\node[attribute] (dstart) [above left=0.5 cm of doc] {birthdate} edge (doc);
+  	% name attribute composite 
+  	\node[attribute] (dname) [below=1.5 cm of doc,xshift=1.2cm] {name} edge (doc);
+	% address attribute composite
+	\node[attribute] (dadress) [below left=0.5cm  of doc,xshift=0.5cm] {address} edge (doc);
+	% phone attribute
+	\node[attribute] (docphone) [left=0.7cm  of doc,yshift=4] {phone} edge (doc);
+	\node[attribute] (docwe) [below right=0.5cm  of doc] {years\_experience} edge (doc);	
+% consult relationship
+\node[relationship] (treat) [right=3cm of doc] {Consults} edge (doc);
+% patient entity
+\node[entity] (pat) [right=1cm of treat] {Patient} edge [total] (treat);
+	%id attribute - primary key
+  	\node[attribute] (patid) [above right=1 cm of pat] {\key{patientID}} edge (pat);
+  	% name attribute composite
+  		\node[attribute] (patname) [above=0.4 cm of pat,yshift=0.7 cm] {name} edge (pat);
+	% address attribute composite
+		\node[attribute] (pad) [below left=1cm  of pat,xshift=1cm,yshift=0.2cm] {address} edge (pat);
+	% phone attribute composite
+	\node[attribute] (pphone) [below=0.3cm  of pat,xshift=01cm] {phone} edge (pat);
+% medical record entity
+	\node[attribute] (msex) [above left=0.5 cm of pat, yshift = 0.6 cm] {gender} edge (pat);
+	\node[attribute] (mbirth) [right =0.2 cm of pat,yshift=0.5cm] {date of birth} edge (pat);
+	\node[attribute] (mblood) [right =0.3 cm of pat, yshift = -0.5cm] {allergies} edge (pat);
+% suffer relationship
+\node[relationship] (suf) [below =5.2cm of pat] {suffers} edge (pat);
+% illness entity
+\node[entity] (ill) [left = 2 cm of suf] {illness} edge (suf);
+	% name
+	\node[attribute] (illnm) [above=1cm  of ill] {\key{Illness\_ID}} edge (ill);
+	% symptom attribute 
+	\node[attribute] (symt) [below=1cm  of ill,xshift=-2cm] {symptoms} edge (ill);
+	% symptom attribute 
+	\node[attribute] (ssas) [above left=0.5cm  of ill] {Department} edge (ill);
+		\node[attribute] (ssad) [above right=0.5cm  of ill] {name} edge (ill);
+	% symptom attribute - primary key
+	\node[attribute] (eml) [below=1cm  of ill,xshift=2cm] {emergency\_level} edge (ill);
+% can treat relationship
+\node[relationship] (tr) [below= 5 cm of doc] {can\_treat} edge [total] (doc) edge (ill);
+\end{tikzpicture}
+\section{Relational Representation and Functional Dependencies}
+\subsection{Relations}
+$Doctor (\underline{Doctor\_ID}, Doctor\_Name, Phone, Address, Birthday, Experiences Years, Department) $\\
+$Patient (\underline{Patient\_ID}, Patient\_Name, Phone, Address, Birthday, \\ Gender, Allergies History, Doctor\_ID, Illness\_ID) $\\
+$Illness (\underline{Illness\_ID}, Illness\_Name, Department, Symptoms, Emergency Level) $\\
+\subsection{Functional Dependencies}
+\subsubsection{Doctor}
+$Doctor\_Name, Phone \rightarrow Address, Department, $\\
+$Doctor\_Name, Birthday \rightarrow Phone, Department$
+\subsubsection{Patient}
+$ Patient\_Name, Phone \rightarrow Address, Birthday, $\\
+ $Birthday, Phone \rightarrow Gender$
+\subsubsection{Illness}
+$Illness\_Name \rightarrow Department, Symptoms$
+\section{Decompositions}
+\subsection{Decomposition 1}
+\subsubsection{Decomposing Doctor}
+$R1:$ Doctor Contact Info $(Doctor\_Name, Phone, Address, Department)$\\
+$R2:$ Doctor Personal Info $(Doctor\_ID, Doctor\_Name, Phone, Department, Birthday)$ \\ \hfil \break
+All other relations remain the same as the original schema
+\subsubsection{Proof: Lossless Join and Functional Preserving}
+ First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cup$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_ID, Doctor\_Name, Phone, Address, Birthday, Experiences Years, Department) \\= Att(R).\\ \hfil \break
+
+Second condition holds true as \\Att(R1) $\cap$  Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cap$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_Name, Phone) \\$\neq \phi$\\ \hfil \break
+
+Third condition holds true as \\Att(R1) $\cap$ Att(R2) = (Doctor\_Name, Phone) is a key of R1 (Doctor\_Name, Phone, Address, Department) because \\Doctor\_Name, Phone $\rightarrow$ Address, Department is given.\\ \hfil \break
+Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.\\ \hfil \break
+\subsection{Decomposition 2}
+\subsubsection{Decomposing Patient}
+R1: Patient Contact Info $(Patient\_Name, Phone, Address,Gender)$\\
+R2: Patient Personal Info $(Patient\_Name, Phone, Patient\_ID, \\Birthday, Allergies History, Doctor\_ID, Illness\_ID)$\\ \hfil \break
+All other relations remain the same as the original schema
+\subsubsection{Proof: Lossless Join and Functional Preserving}
+First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Patient\_Name, Phone, Address, Gender) $\cup$ (Patient\_Name, Phone, Patient\_ID, Birthday, Allergies History, Doctor\_ID, Illness\_ID) \\= (Patient\_ID, Patient\_Name, Phone, Address, Birthday, Gender, Allergies History, Doctor\_ID, Illness\_ID)\\= Att(R).\\ \hfil \break
+Second condition holds true as \\Att(R1) $\cap$Att(R2) \\= (Patient\_Name, Phone, Address,Gender) $\cap$ (Patient\_Name, Phone, Patient\_ID, Birthday, Allergies History, Doctor\_ID, Illness\_ID) \\$\neq \phi$.\\ \hfil \break
+Third condition holds true as \\Att(R1) $\cap$ Att(R2) \\= (Patient\_Name, Phone) is a key of \\R1(Patient\_Name, Phone, Address, Patient\_ID) because \\Patient\_Name, Phone $\rightarrow$ Address, Birthday and \\Birthday, Phone $\rightarrow$ Gender are given..\\ \hfil \break
+Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.
+\section{SQL DDLs}
+\subsection{Version 1}
+This version is the original database as defined in section 2.1.\\
+Filename: \url{create_d.ddl}
+\begin{lstlisting}[language=SQL]
+	CREATE TABLE `Patient` (
+	`Patient_ID`	NUMERIC NOT NULL,
+	`Patient_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Birthday`	NUMERIC,
+	`Gender`	TEXT,
+	`Allergies_History`	TEXT,
+	`Doctor_ID`	NUMERIC NOT NULL,
+	`Illness_ID`	NUMERIC,
+	PRIMARY KEY(`Patient_ID`)
+);
+CREATE TABLE IF NOT EXISTS "Doctor" (
+	`Doctor_ID`	NUMERIC NOT NULL UNIQUE,
+	`Doctor_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Birthday`	NUMERIC,
+	`Experiences_Year`	INTEGER,
+	`Department`	TEXT,
+	PRIMARY KEY(`Doctor_ID`)
+);
+CREATE TABLE `Illness` (
+	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
+	`Illness_Name`	TEXT NOT NULL UNIQUE,
+	`Department`	TEXT,
+	`Symptoms`	TEXT,
+	`Emergency_Level`	INTEGER,
+	PRIMARY KEY(`Illness_ID`)
+);
+\end{lstlisting}
+\subsection{Version 2}
+This version was created using Decomposition 1 (Section 3.1)\\
+Filename: \url{create_d2.ddl}
+\begin{lstlisting}[language=SQL]
+CREATE TABLE IF NOT EXISTS "Doctor Personal Info" (
+	`Doctor_ID`	NUMERIC NOT NULL UNIQUE,
+	`Doctor_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Department`	TEXT,
+	`Birthday`	INTEGER,
+	PRIMARY KEY(`Doctor_ID`)
+);
+CREATE TABLE IF NOT EXISTS "Doctor Contact Info" (
+	`Doctor_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Department`	TEXT
+);
+CREATE TABLE IF NOT EXISTS "Illness" (
+	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
+	`Illness_Name`	TEXT NOT NULL,
+	`Department`	TEXT,
+	`Symptom`	TEXT,
+	`Emergency_Level`	INTEGER,
+	PRIMARY KEY(`Illness_ID`)
+);
+CREATE TABLE IF NOT EXISTS "Patient" (
+	`Patient_ID`	NUMERIC NOT NULL UNIQUE,
+	`Patient_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Birthday`	NUMERIC,
+	`Gender`	TEXT,
+	`Allergies_History`	TEXT,
+	`Doctor_ID`	NUMERIC,
+	`Illness_ID`	NUMERIC,
+	PRIMARY KEY(`Patient_ID`)
+);
+\end{lstlisting}
+\subsection{Version 3}
+This version was created using Decomposition 2 (Section 3.2)\\
+Filename: \url{create_d3.ddl}
+\begin{lstlisting}[language=SQL]
+CREATE TABLE `Doctor` (
+	`Doctor_ID`	NUMERIC NOT NULL UNIQUE,
+	`Doctor_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Birthday`	NUMERIC,
+	`Experiences_Years`	INTEGER,
+	`Department`	TEXT,
+	PRIMARY KEY(`Doctor_ID`)
+);
+CREATE TABLE `Illness` (
+	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
+	`Illness_Name`	TEXT NOT NULL,
+	`Department`	TEXT,
+	`Symptom`	TEXT,
+	`Emergency_Level`	INTEGER,
+	PRIMARY KEY(`Illness_ID`)
+);
+CREATE TABLE IF NOT EXISTS "Patient Personal Info" (
+	`Patient_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Gender`	TEXT,
+	`Birthday`	NUMERIC,
+	`Allergies_History`	TEXT,
+	`Doctor_ID`	NUMERIC,
+	`Illness_ID`	NUMERIC
+);
+CREATE TABLE IF NOT EXISTS "Patient Contact Info" (
+	`Patient_Name`	TEXT NOT NULL,
+	`Phone`	NUMERIC,
+	`Address`	TEXT,
+	`Patient_ID`	INTEGER NOT NULL UNIQUE,
+	PRIMARY KEY(`Patient_ID`)
+);
+	
+\end{lstlisting}
+
+\end{document}

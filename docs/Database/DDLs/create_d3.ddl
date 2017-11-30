@@ -1,5 +1,5 @@
 CREATE TABLE `Doctor` (
-	`Doctor_ID`	INTEGER NOT NULL UNIQUE,
+	`Doctor_ID`	NUMERIC NOT NULL UNIQUE,
 	`Doctor_Name`	TEXT NOT NULL,
 	`Phone`	NUMERIC,
 	`Address`	TEXT,

@@ -24,7 +24,7 @@ CREATE TABLE `Illness` (
 	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
 	`Illness_Name`	TEXT NOT NULL UNIQUE,
 	`Department`	TEXT,
-	`Symptoms`	TEXT,
+	`Symptom`	TEXT,
 	`Emergency_Level`	INTEGER,
 	PRIMARY KEY(`Illness_ID`)
 );

@@ -11,10 +11,7 @@ import java.util.Random;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-/**
- *
- * @author sqlitetutorial.net
- */
+
 public class DataGen {
     private final static String[] depts = { "A&E", "Cardiology", "Imaging", "ENT", "Surgery", "Gynaecology",
             "Neurology", "Physiotherapy" };
@@ -31,12 +28,7 @@ public class DataGen {
         return conn;
     }
 
-    /**
-     * Insert a new row into the warehouses table
-     *
-     * @param name
-     * @param capacity
-     */
+
     public static void insertPatient (int id, String name, long phone, String add, String birthday, String Gender,
             String alrg, int docid, int illid) {
         String sql = "INSERT INTO Patient(Patient_ID,Patient_Name,Phone,Address,Birthday,Gender,Allergies_History,Doctor_ID,Illness_ID) VALUES(?,?,?,?,?,?,?,?,?)";
@@ -90,11 +82,7 @@ public class DataGen {
         }
     }
 
-    /**
-     * @param args
-     *            the command line arguments
-     * @throws IOException
-     */
+
     public static void main (String[] args) throws IOException {
         ArrayList<Long> PhoneNos = GeneratePhoneNos(10000);
         ArrayList<String> names = GenerateNames(10000);

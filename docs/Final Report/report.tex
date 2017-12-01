@@ -123,13 +123,14 @@ $Patient (\underline{Patient\_ID}, Patient\_Name, Phone, Address, Birthday, \\ G
 $Illness (\underline{Illness\_ID}, Illness\_Name, Department, Symptoms, Emergency Level) $\\
 \subsection{Functional Dependencies}
 \subsubsection{Doctor}
-$Doctor\_Name, Phone \rightarrow Address, Department, $\\
-$Doctor\_Name, Birthday \rightarrow Phone, Department$
+$Doctor\_Name, Phone \rightarrow Doctor\_ID, Department,Experience Years $\\
+$Doctor\_ID \rightarrow Doctor_Name, Address, Phone, Birthday$
 \subsubsection{Patient}
-$ Patient\_Name, Phone \rightarrow Address, Birthday, $\\
- $Birthday, Phone \rightarrow Gender$
+$ Patient\_Name, Phone \rightarrow Patient_ID,Address, Birthday, Allergies History $\\
+ $Patient\_ID \rightarrow Patient_Name,Doctor\_ID,Illness\_ID,Phone,Gender$
 \subsubsection{Illness}
-$Illness\_Name \rightarrow Department, Symptoms$
+$Illness\_Name \rightarrow Illness_ID, Department, Symptoms$\\
+$Illness\_ID \rightarrow Illness\_Name, Emergency Level$
 \section{Decompositions}
 \subsection{Decomposition 1}
 \subsubsection{Decomposing Doctor}
@@ -141,7 +142,7 @@ All other relations remain the same as the original schema
 
 Second condition holds true as \\Att(R1) $\cap$  Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cap$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_Name, Phone) \\$\neq \phi$\\ \hfil \break
 
-Third condition holds true as \\Att(R1) $\cap$ Att(R2) = (Doctor\_Name, Phone) is a key of R1 (Doctor\_Name, Phone, Address, Department) because \\Doctor\_Name, Phone $\rightarrow$ Address, Department is given.\\ \hfil \break
+Third condition holds true as \\Att(R1) $\cap$ Att(R2) = (Doctor\_Name, Phone, Department) is a key of R1 (Doctor\_Name, Phone, Address, Department) because of the FD's given\\ \hfil \break
 Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.\\ \hfil \break
 \subsection{Decomposition 2}
 \subsubsection{Decomposing Patient}
@@ -151,7 +152,7 @@ All other relations remain the same as the original schema
 \subsubsection{Proof: Lossless Join and Functional Preserving}
 First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Patient\_Name, Phone, Address, Gender) $\cup$ (Patient\_Name, Phone, Patient\_ID, Birthday, Allergies History, Doctor\_ID, Illness\_ID) \\= (Patient\_ID, Patient\_Name, Phone, Address, Birthday, Gender, Allergies History, Doctor\_ID, Illness\_ID)\\= Att(R).\\ \hfil \break
 Second condition holds true as \\Att(R1) $\cap$Att(R2) \\= (Patient\_Name, Phone, Address,Gender) $\cap$ (Patient\_Name, Phone, Patient\_ID, Birthday, Allergies History, Doctor\_ID, Illness\_ID) \\$\neq \phi$.\\ \hfil \break
-Third condition holds true as \\Att(R1) $\cap$ Att(R2) \\= (Patient\_Name, Phone) is a key of \\R1(Patient\_Name, Phone, Address, Patient\_ID) because \\Patient\_Name, Phone $\rightarrow$ Address, Birthday and \\Birthday, Phone $\rightarrow$ Gender are given..\\ \hfil \break
+Third condition holds true as \\Att(R1) $\cap$ Att(R2) \\= (Patient\_Name, Phone) is a key of \\R1(Patient\_Name, Phone, Address, Patient\_ID) because of the given FD's\\ \hfil \break
 Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.
 \section{SQL DDLs}
 \subsection{Version 1}

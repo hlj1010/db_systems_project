@@ -372,9 +372,8 @@ Give Illness\_ID = '1', find all patient has this kind of illness Patient\_Name 
 
 
 \section{SQL implementations of the queries}
-\subsection{First English Query}
-Give Doctor\_Name = 'Taren Batarse', find all his patients Patient\_ID and Patient\_Name.
-(Relate to Doctor, Patient table)
+\subsection{First Query}
+Given a Doctor\_Name = 'Taren Batarse', find all his patient's Patient\_ID and Patient\_Name.
 \subsubsection{Version 1}
 Filename: \url{query_1_db1.sql}
 \begin{lstlisting}[language=SQL]
@@ -401,9 +400,9 @@ join 'Patient Contact info' as p on pp.Patient_Name = p.Patient_Name
 where d.Doctor_Name='Taren Batarse';
 \end{lstlisting}
 
-\subsection{Second English Query}
-Give Patient\_Name is 'Erika Heuberger' and Phone is '2449717107', find Doctor\_Name, and her symptom.
-(Relate to Doctor, Illness, Patient table)
+\subsection{Second Query}
+Given Patient\_Name is 'Erika Heuberger' and Phone is '2449717107', find their doctors Name, and her symptoms.
+
 \subsubsection{Version 1}
 Filename: \url{query_2_db1.sql}
 \begin{lstlisting}[language=SQL]
@@ -433,9 +432,9 @@ join Illness as i on pp.Illness_ID = i.Illness_ID
 where p.Patient_Name = 'Erika Heuberger' and p.Phone = '2449717107';
 \end{lstlisting}
 
-\subsection{Third English Query}
-Give Illness\_ID = '1', find all patient has this kind of illness Patient\_Name and their Doctor\_Name.
-(Relate to Doctor, Illness, Patient table)
+\subsection{Third Query}
+Given Illness\_ID = '1', find all patient that have this of illness Patient\_Name along with their Doctor\_Name. \\ 
+This is second of the two queries that include all the tables in a the database.
 \subsubsection{Version 1}
 Filename: \url{query_3_db1.sql}
 \begin{lstlisting}[language=SQL]

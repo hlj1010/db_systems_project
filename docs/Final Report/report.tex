@@ -67,6 +67,9 @@ Design a database for storing information about medical doctors, their patients,
 	\item Test the time in ns for exeuting the 3 queries on each database, by running each of them 1000 times.
 \end{enumerate}
 \pagebreak
+
+
+
 \section{ER-Diagram}
 \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
 % Doctor entity
@@ -116,6 +119,8 @@ Design a database for storing information about medical doctors, their patients,
 % can treat relationship
 \node[relationship] (tr) [below= 5 cm of doc] {can\_treat} edge [total] (doc) edge (ill);
 \end{tikzpicture}
+
+
 \section{Relational Representation and Functional Dependencies}
 \subsection{Relations}
 $Doctor (\underline{Doctor\_ID}, Doctor\_Name, Phone, Address, Birthday, Experiences Years, Department) $\\
@@ -131,6 +136,8 @@ $ Patient\_Name, Phone \rightarrow Patient_ID,Address, Birthday, Allergies Histo
 \subsubsection{Illness}
 $Illness\_Name \rightarrow Illness_ID, Department, Symptoms$\\
 $Illness\_ID \rightarrow Illness\_Name, Emergency Level$
+
+
 \section{Decompositions}
 \subsection{Decomposition 1}
 \subsubsection{Decomposing Doctor}
@@ -267,7 +274,158 @@ CREATE TABLE IF NOT EXISTS "Patient Contact Info" (
 	`Patient_ID`	INTEGER NOT NULL UNIQUE,
 	PRIMARY KEY(`Patient_ID`)
 );
-	
+
+\end{lstlisting}
+
+
+\section{The database with data}
+
+
+\section{Copy the data from the first version}
+\subsection{Copy data to Version 2}
+This queries was using to copy data from version 1.
+Filename: \url{copy_d_to_d2.sql}
+\begin{lstlisting}[language=SQL]
+.open d.db
+ATTACH 'd2.db' as d2;
+
+INSERT INTO d2.'Doctor Personal Info'
+SELECT Doctor_ID, Doctor_Name, Phone, Department, Birthday FROM Doctor;
+
+INSERT INTO d2.'Doctor Contact Info'
+SELECT Doctor_Name, Phone, Address, Department FROM Doctor;
+
+INSERT INTO d2.Illness
+SELECT * FROM Illness;
+
+INSERT INTO d2.Patient
+SELECT * FROM Patient;
+\end{lstlisting}
+\subsection{Copy data to Version 3}
+This queries was using to copy data from version 1.
+Filename: \url{copy_d_to_d3.sql}
+\begin{lstlisting}[language=SQL]
+.open d.db
+ATTACH 'd3.db' as d2;
+
+INSERT INTO d2.'Patient Personal Info'
+SELECT Patient_Name, Phone, Gender, Birthday,Allergies_History,Doctor_ID,Illness_ID FROM Patient;
+
+INSERT INTO d2.'Patient Contact Info'
+SELECT Patient_Name, Phone, Address, Patient_ID FROM Patient;
+
+INSERT INTO d2.Illness
+SELECT * FROM Illness;
+
+INSERT INTO d2.Doctor
+SELECT * FROM Doctor;
+\end{lstlisting}
+
+
+\section{English Queries}
+\subsection{First English Query}
+Give Doctor\_Name = 'Taren Batarse', find all his patients Patient\_ID and Patient\_Name.
+(Relate to Doctor, Patient table)
+\subsection{Second English Query}
+Give Patient\_Name is 'Erika Heuberger' and Phone is '2449717107', find Doctor\_Name, and her symptom.
+(Relate to Doctor, Illness, Patient table)
+\subsection{Third English Query}
+Give Illness\_ID = '1', find all patient has this kind of illness Patient\_Name and their Doctor\_Name.
+(Relate to Doctor, Illness, Patient table)
+
+
+\section{SQL implementations of the queries}
+\subsection{First English Query}
+Give Doctor\_Name = 'Taren Batarse', find all his patients Patient\_ID and Patient\_Name.
+(Relate to Doctor, Patient table)
+\subsubsection{Version 1}
+Filename: \url{query_1_db1.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_ID, p.Patient_Name
+from `Patient` as p
+join `Doctor` as d on d.Doctor_ID = p.Doctor_ID
+where d.Doctor_Name = 'Taren Batarse';
+\end{lstlisting}
+\subsubsection{Version 2}
+Filename: \url{query_1_db2.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_ID , p.Patient_Name
+from Patient as p
+join `Doctor Personal Info` as d on d.Doctor_ID = p.Doctor_ID
+where d.Doctor_Name = 'Taren Batarse';
+\end{lstlisting}
+\subsubsection{Version 3}
+Filename: \url{query_1_db3.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_ID, p.Patient_Name 
+from 'Patient Personal Info' as pp
+join Doctor as d on d.Doctor_ID = pp.Doctor_ID
+join 'Patient Contact info' as p on pp.Patient_Name = p.Patient_Name
+where d.Doctor_Name='Taren Batarse';
+\end{lstlisting}
+
+\subsection{Second English Query}
+Give Patient\_Name is 'Erika Heuberger' and Phone is '2449717107', find Doctor\_Name, and her symptom.
+(Relate to Doctor, Illness, Patient table)
+\subsubsection{Version 1}
+Filename: \url{query_2_db1.sql}
+\begin{lstlisting}[language=SQL]
+select d.Doctor_Name, i.symptom
+from Patient as p
+join Doctor as d on d.Doctor_ID = p.Doctor_ID
+join Illness as i on i.Illness_ID = p.Illness_ID
+where p.Patient_Name = 'Erika Heuberger' and p.Phone = '2449717107'
+\end{lstlisting}
+\subsubsection{Version 2}
+Filename: \url{query_2_db2.sql}
+\begin{lstlisting}[language=SQL]
+select d.Doctor_Name , i.symptom
+from Patient as p
+join `Doctor Personal Info` as d on d.Doctor_ID = p.Doctor_ID
+join Illness as i on i.Illness_ID = p.Illness_ID
+where p.Patient_Name = 'Erika Heuberger' and p.Phone = '2449717107'
+\end{lstlisting}
+\subsubsection{Version 3}
+Filename: \url{query_2_db3.sql}
+\begin{lstlisting}[language=SQL]
+select d.Doctor_Name , i.Illness_ID
+from `Patient Contact Info` as p
+join `Patient Personal Info` as pp on p.Phone = pp.Phone
+join Doctor as d on pp.Doctor_ID = d.Doctor_ID
+join Illness as i on pp.Illness_ID = i.Illness_ID
+where p.Patient_Name = 'Erika Heuberger' and p.Phone = '2449717107';
+\end{lstlisting}
+
+\subsection{Third English Query}
+Give Illness\_ID = '1', find all patient has this kind of illness Patient\_Name and their Doctor\_Name.
+(Relate to Doctor, Illness, Patient table)
+\subsubsection{Version 1}
+Filename: \url{query_3_db1.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_Name, d.Doctor_Name
+from Patient as p
+join Doctor as d on d.Doctor_ID = p.Doctor_ID
+join Illness as i on i.Illness_ID = p.Illness_ID
+where p.Illness_ID = '1';
+\end{lstlisting}
+\subsubsection{Version 2}
+Filename: \url{query_3_db2.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_Name , d.Doctor_Name
+from Patient as p
+join `Doctor Personal Info` as d on d.Doctor_ID = p.Doctor_ID
+join Illness as i on i.Illness_ID = p.Illness_ID
+where i.Illness_ID = '1';
+\end{lstlisting}
+\subsubsection{Version 3}
+Filename: \url{query_3_db3.sql}
+\begin{lstlisting}[language=SQL]
+select p.Patient_Name , d.Doctor_Name
+from `Patient Personal Info` as pp
+join `Patient Contact Info` as p on p.Phone = pp.Phone
+join Doctor as d on pp.Doctor_ID = d.Doctor_ID
+join Illness as i on i.Illness_ID = pp.Illness_ID
+where i.Illness_ID = '1';
 \end{lstlisting}
 
 \end{document}

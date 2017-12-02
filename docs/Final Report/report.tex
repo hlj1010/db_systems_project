@@ -277,11 +277,49 @@ CREATE TABLE IF NOT EXISTS "Patient Contact Info" (
 \end{lstlisting}
 
 
-\section{The database with data}
-Filename: \url{d.db}
+\section{Filling The database with data}
+Java code was used to generate and insert data into d.db. Filename: \url{DataGen.java} \\
+Below are some relevant snippets:
+\subsection{Data Generation}
+Below is an example for java code used to generate symptoms for the illness table. It used a text file with a list of generic symptoms and randomly picks out a number of symptoms represented by i. Similar code was used to generate all other fields.
+\begin{lstlisting}[language=java]
+	private static ArrayList<String> GenerateSymptoms (int i) throws IOException {
+        ArrayList<String> Diseases = new ArrayList<>();
+        Random r = new Random(System.currentTimeMillis());
+        FileReader f = new FileReader(new File("etc/sym.txt"));
+        BufferedReader br = new BufferedReader(f);
+        String s;
+        for (int j = 0; j < i; j++) {
+            for (int k = 0; k < r.nextInt(20); k++)
+                br.readLine();
+            s = br.readLine();
+            Diseases.add(s.split("^[^\\s]*\\s")[1]);
+        }
+        br.close();
+        return Diseases;
+    }
+\end{lstlisting}
+\subsection{Data Insertion}
+sqlite JDBC for Java was used to insert the generated data, here is the code for inserting data into the Patient table
+\begin{lstlisting}[language=java]
+	public static void insertDoctor (int id, String name, long phone, String add, String birthday, int exp, String dept) {
+        String sql = "INSERT INTO Doctor(Doctor_ID,Doctor_Name,Phone,Address,Birthday,Experiences_Year,Department) VALUES(?,?,?,?,?,?,?)";
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setString(2, name);
+            pstmt.setLong(3, phone);
+            pstmt.setString(4, add);
+            pstmt.setString(5, birthday);
+            pstmt.setInt(6, exp);
+            pstmt.setString(7, dept);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+\end{lstlisting}
 
-
-\section{Copy the data from the first version}
+\section{Copy the data from the first version to the decompositions}
 \subsection{Copy data to Version 2}
 This queries was using to copy data from version 1.
 Filename: \url{copy_d_to_d2.sql}
@@ -426,9 +464,12 @@ join Doctor as d on pp.Doctor_ID = d.Doctor_ID
 join Illness as i on i.Illness_ID = pp.Illness_ID
 where i.Illness_ID = '1';
 \end{lstlisting}
-
-
 \section{Test the time}
 Filename: \url{results.csv}
-
+\section{References} 
+\begin{enumerate}
+	\item \url{http://www.texample.net/tikz/examples/entity-relationship-diagram/}
+	\item \url{http://www.mockaroo.com} - used this to generate random data
+	\item \url{https://www.cdc.gov/datastatistics/index.html}
+\end{enumerate}
 \end{document}

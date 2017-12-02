@@ -8,6 +8,9 @@ java_src/:
 	All the java code used for project
 
 copy_queries/:
+	All query implementations for copying data from database 1 to 2 and 3.
+
+DDLs/:
 	DDL files to create the 3 versions of the database
 
 select_queries/:

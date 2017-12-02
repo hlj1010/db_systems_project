@@ -46,7 +46,7 @@
 }
  
 \lstset{style=mystyle}
-\title{CSE 4020 - Database Systems Project}
+\title{CSE 4020/5231 - Database Systems Project}
 \author{Lingjing Huang, Shreyas Ugemuge}
 \begin{document}
 \maketitle
@@ -60,14 +60,13 @@ Design a database for storing information about medical doctors, their patients,
 	\item Give a relational representation of the E-R diagram that allows for 2 functional preserving and lossless join decompositions. Describe its functional dependencies.
 	\item Give the two decompositions and prove that they are lossless join and functional preserving.
 	\item Give the SQL DDLs for creating the three versions of the database.
-	\item Fill the first database with data (at least 100 columns in each table).
+	\item Fill the first database with data (at least 100 rows in each table).
 	\item Give the SQL queries to copy the data from the first version into its 2 decompositions.
 	\item Propose in english 3 queries that require at least 2 table joins each and such that all tables are involved in at least 2 queries.
 	\item Propose SQL implementations of the 3 queries on all three versions of the database.
 	\item Test the time in ns for exeuting the 3 queries on each database, by running each of them 1000 times.
 \end{enumerate}
 \pagebreak
-
 
 
 \section{ER-Diagram}
@@ -132,7 +131,7 @@ $Doctor\_Name, Phone \rightarrow Doctor\_ID, Department,Experience Years $\\
 $Doctor\_ID \rightarrow Doctor_Name, Address, Phone, Birthday$
 \subsubsection{Patient}
 $ Patient\_Name, Phone \rightarrow Patient_ID,Address, Birthday, Allergies History $\\
- $Patient\_ID \rightarrow Patient_Name,Doctor\_ID,Illness\_ID,Phone,Gender$
+$Patient\_ID \rightarrow Patient_Name,Doctor\_ID,Illness\_ID,Phone,Gender$
 \subsubsection{Illness}
 $Illness\_Name \rightarrow Illness_ID, Department, Symptoms$\\
 $Illness\_ID \rightarrow Illness\_Name, Emergency Level$
@@ -145,10 +144,8 @@ $R1:$ Doctor Contact Info $(Doctor\_Name, Phone, Address, Department)$\\
 $R2:$ Doctor Personal Info $(Doctor\_ID, Doctor\_Name, Phone, Department, Birthday)$ \\ \hfil \break
 All other relations remain the same as the original schema
 \subsubsection{Proof: Lossless Join and Functional Preserving}
- First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cup$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_ID, Doctor\_Name, Phone, Address, Birthday, Experiences Years, Department) \\= Att(R).\\ \hfil \break
-
+First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cup$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_ID, Doctor\_Name, Phone, Address, Birthday, Experiences Years, Department) \\= Att(R).\\ \hfil \break
 Second condition holds true as \\Att(R1) $\cap$  Att(R2) \\= (Doctor\_Name, Phone, Address, Department) $\cap$ (Doctor\_ID, Doctor\_Name, Phone, Department, Birthday) \\= (Doctor\_Name, Phone) \\$\neq \phi$\\ \hfil \break
-
 Third condition holds true as \\Att(R1) $\cap$ Att(R2) = (Doctor\_Name, Phone, Department) is a key of R1 (Doctor\_Name, Phone, Address, Department) because of the FD's given\\ \hfil \break
 Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.\\ \hfil \break
 \subsection{Decomposition 2}
@@ -161,6 +158,8 @@ First condition holds true as \\Att(R1) $\cup$ Att(R2) \\= (Patient\_Name, Phone
 Second condition holds true as \\Att(R1) $\cap$Att(R2) \\= (Patient\_Name, Phone, Address,Gender) $\cap$ (Patient\_Name, Phone, Patient\_ID, Birthday, Allergies History, Doctor\_ID, Illness\_ID) \\$\neq \phi$.\\ \hfil \break
 Third condition holds true as \\Att(R1) $\cap$ Att(R2) \\= (Patient\_Name, Phone) is a key of \\R1(Patient\_Name, Phone, Address, Patient\_ID) because of the given FD's\\ \hfil \break
 Furthermore, all dependencies of R either can be a part of R1 or R2 or must be derivable from combination of FD’s of R1 and R2.
+
+
 \section{SQL DDLs}
 \subsection{Version 1}
 This version is the original database as defined in section 2.1.\\
@@ -192,7 +191,7 @@ CREATE TABLE `Illness` (
 	`Illness_ID`	NUMERIC NOT NULL UNIQUE,
 	`Illness_Name`	TEXT NOT NULL UNIQUE,
 	`Department`	TEXT,
-	`Symptoms`	TEXT,
+	`Symptom`	TEXT,
 	`Emergency_Level`	INTEGER,
 	PRIMARY KEY(`Illness_ID`)
 );
@@ -321,7 +320,6 @@ INSERT INTO d2.Doctor
 SELECT * FROM Doctor;
 \end{lstlisting}
 
-
 \section{English Queries}
 \subsection{First English Query}
 Give Doctor\_Name = 'Taren Batarse', find all his patients Patient\_ID and Patient\_Name.
@@ -427,5 +425,8 @@ join Doctor as d on pp.Doctor_ID = d.Doctor_ID
 join Illness as i on i.Illness_ID = pp.Illness_ID
 where i.Illness_ID = '1';
 \end{lstlisting}
+
+
+\section{Test the time}
 
 \end{document}

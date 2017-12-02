@@ -463,8 +463,83 @@ join Doctor as d on pp.Doctor_ID = d.Doctor_ID
 join Illness as i on i.Illness_ID = pp.Illness_ID
 where i.Illness_ID = '1';
 \end{lstlisting}
-\section{Test the time}
-Filename: \url{results.csv}
+\section{Conclusion: Query Execution Times}
+Results Filename: \url{results.csv}
+\\Code Filename: \url{Analyze.java}
+\subsection{Method}
+Java along with SQLite JDBC was used for this step. 3 other methods were tried and rejected namely
+\begin{itemize}
+	\item  ".timer on" command in the sqlite3 command line interface
+	\item "time" utility for linux
+	\item GNU time utility
+ \end{itemize}
+ All 3 of the alternatives only had millisecond precision and hence were rejected.\\
+ 
+The following Subsections explore some of the relevant code snippets
+\subsubsection{Retrieving sql queries from file and recording timings in a file}
+\begin{lstlisting}[language=java]
+	  private static String queryFromFile (String filename) throws Exception {
+        String query = "", temp;
+        BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
+        while ((temp = br.readLine()) != null)
+            query += temp + " ";
+        br.close();
+        return query;
+    }
+
+    public static void main (String[] args) throws Exception {
+        long[][] times = new long[1000][9];
+        for (int i = 1; i < 4; i++) {
+            for (int j = 1; j < 4; j++) {
+                for (int k = 0; k < 1000; k++) {
+                    times[k][(3 * (i - 1)) + (j - 1)] = timeQuery(i, j);
+                }
+            }
+        }
+        toCSV(times);
+    }
+\end{lstlisting}
+\subsubsection{Connecting to database and timing the queries}
+\begin{lstlisting}[language=java]
+	private static Connection connect (int i) {
+        // a ternary operator to make sure 1st database is read as d.db
+        String url = "jdbc:sqlite:../d" + (i == 1 ? "" : i) + ".db";
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }
+
+    private static long timeQuery (int databaseNumber, int queryNumber) throws Exception {
+        String query = queryFromFile("../Queries/query_" + queryNumber + "_db" + databaseNumber + ".sql");
+        Connection c = connect(databaseNumber);
+        Statement s = c.createStatement();
+        long start = System.nanoTime();
+        s.executeQuery(query);
+        long end = System.nanoTime() - start;
+        return end;
+
+    }
+\end{lstlisting}
+\subsection{Analysis}
+Below is a summary table with some statistics based on the 9*1000 - 1 data points. The only outlier removed was the first reading that was taken, this was because java adds a overhead the first time it runs the first query for the first database. All values are rounded to the ones place\\
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|X|X|X|}
+\hline
+\  & Query 1 DB 1 & Query 1 DB 2 & Query 1 DB 3 & Query 2 DB 1 &  Query 2 DB 2 & Query 2 DB 3 & Query 3 DB 1 & Query 3 DB 2 & Query 3 DB 3 \\
+\hline
+Average time (ns) & 144837&162274&166437&131116&133930&175845&897936&246981&761884\\ \hline
+Standard Deviation (\%) & 20&32&25&100&45&7&24&40&19\\
+\hline
+\end{tabularx}
+
+
+\subsection{Conclusion}
+Query 1 and 2 perform better on the original version of the database by a small margin. \\
+Query 3 sees a significant performance gain in database 2. This is due to the doctor table being decomposed into doctor personal info and hence reducing the query time.
+
 \section{References} 
 \begin{enumerate}
 	\item \url{http://www.texample.net/tikz/examples/entity-relationship-diagram/}
